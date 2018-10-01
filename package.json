@@ -1,0 +1,27 @@
+{
+  "name": "play",
+  "version": "0.0.1",
+  "main": "index.js",
+  "repository": "",
+  "author": "",
+  "license": "Private",
+  "private": true,
+  "scripts": {
+    "postinstall": "rm -Rf .psc-package && $(yarn bin)/psc-package install",
+    "clean": "rm -Rf .pulp-cache dist output",
+    "pscid:build": "$(yarn bin)/pulp build",
+    "build": "yarn clean && $(yarn bin)/pulp build && $(yarn bin)/parcel build index.html --experimental-scope-hoisting",
+    "serve": "$(yarn bin)/pulp --watch build & $(yarn bin)/parcel index.html --open",
+    "id": "$(yarn bin)/pscid",
+    "test": "$(yarn bin)/pulp test"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.9.4",
+    "psc-package": "^0.3.2",
+    "pscid": "^2.5.3",
+    "pulp": "^12.3.0",
+    "purescript": "^0.12.0",
+    "purescript-psa": "^0.6.0"
+  },
+  "dependencies": {}
+}
