@@ -1,14 +1,15 @@
 {
-  "name": "play",
-  "set": "psc-0.12.0-20180901",
-  "source": "https://github.com/purescript/package-sets.git",
-  "depends": [
-    "aff",
-    "behaviors",
-    "canvas",
-    "colors",
-    "partial",
-    "prelude",
-    "console"
-  ]
+    "name": "play",
+    "set": "psc-0.12.0-20180901",
+    "source": "https://github.com/purescript/package-sets.git",
+    "depends": [
+        "random",
+        "aff",
+        "behaviors",
+        "canvas",
+        "colors",
+        "partial",
+        "prelude",
+        "console"
+    ]
 }
