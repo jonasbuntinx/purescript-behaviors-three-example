@@ -2,7 +2,6 @@ module ParticleEngine where
 
 import Prelude
 
-import Color (Color, hsl)
 import Effect (Effect)
 import Effect.Random (random)
 import Math as Math
@@ -18,12 +17,12 @@ type Particle =
   { position :: Vector
   , velocity :: Vector
   , acceleration :: Vector
-  , angle :: Number
-  , angleVelocity :: Number
-  , angleAcceleration :: Number
-  , size :: Number
-  , color :: Color
-  , opacity :: Number
+  --, angle :: Number
+  --, angleVelocity :: Number
+  --, angleAcceleration :: Number
+  --, size :: Number
+  --, color :: Color
+  --, opacity :: Number
   , age :: Number
   , state :: ParticleState
   }
@@ -34,22 +33,22 @@ type ParticleEngine =
   , positionRadius :: Number
   , velocityBase :: Vector
   , velocitySpread :: Vector
-  , speedBase :: Number
-  , speedSpread :: Number
+  --, speedBase :: Number
+  --, speedSpread :: Number
   , accelerationBase :: Vector
   , accelerationSpread :: Vector
-  , angleBase :: Number
-  , angleSpread :: Number
-  , angleVelocityBase :: Number
-  , angleVelocitySpread :: Number
-  , angleAccelerationBase :: Number
-  , angleAccelerationSpread :: Number
-  , sizeBase :: Number
-  , sizeSpread :: Number
-  , colorBase :: Vector
-  , colorSpread :: Vector
-  , opacityBase :: Number
-  , opacitySpread :: Number
+  --, angleBase :: Number
+  --, angleSpread :: Number
+  --, angleVelocityBase :: Number
+  --, angleVelocitySpread :: Number
+  --, angleAccelerationBase :: Number
+  --, angleAccelerationSpread :: Number
+  --, sizeBase :: Number
+  --, sizeSpread :: Number
+  --, colorBase :: Vector
+  --, colorSpread :: Vector
+  --, opacityBase :: Number
+  --, opacitySpread :: Number
   , particlesPerSecond :: Number
   , particleDeathAge :: Number
   , emitterDeathAge :: Number
@@ -74,22 +73,22 @@ snowEngine =
     , positionRadius:           0.0
     , velocityBase:             { x: 0.0, y: (- 60.0), z: 0.0 }
     , velocitySpread:           { x: 50.0, y: 20.0, z: 50.0 }
-    , speedBase:                0.0
-    , speedSpread:              0.0
+    --, speedBase:                0.0
+    --, speedSpread:              0.0
     , accelerationBase:         { x: 0.0, y: (- 10.0), z: 0.0 }
     , accelerationSpread:       { x: 0.0, y: 0.0, z: 0.0 }
-    , angleBase:                0.0
-    , angleSpread:              720.0
-    , angleVelocityBase:        0.0
-    , angleVelocitySpread:      60.0
-    , angleAccelerationBase:    0.0
-    , angleAccelerationSpread:  0.0
-    , sizeBase:                 0.0
-    , sizeSpread:               0.0
-    , colorBase:                { x: 0.66, y: 1.0, z: 0.9 }
-    , colorSpread:              { x: 0.0, y: 0.0, z: 0.0 }
-    , opacityBase:              1.0
-    , opacitySpread:            0.0
+    --, angleBase:                0.0
+    --, angleSpread:              720.0
+    --, angleVelocityBase:        0.0
+    --, angleVelocitySpread:      60.0
+    --, angleAccelerationBase:    0.0
+    --, angleAccelerationSpread:  0.0
+    --, sizeBase:                 0.0
+    --, sizeSpread:               0.0
+    --, colorBase:                { x: 0.66, y: 1.0, z: 0.9 }
+    --, colorSpread:              { x: 0.0, y: 0.0, z: 0.0 }
+    --, opacityBase:              1.0
+    --, opacitySpread:            0.0
     , particlesPerSecond
     , particleDeathAge
     , emitterDeathAge
@@ -101,22 +100,22 @@ makeParticle engine = do
   position <- randomVector engine.positionBase engine.positionSpread
   velocity <- randomVector engine.velocityBase engine.velocitySpread
   acceleration <- randomVector engine.accelerationBase engine.accelerationSpread
-  angle <- randomValue engine.angleBase engine.angleSpread
-  angleVelocity <- randomValue engine.angleVelocityBase engine.angleVelocitySpread
-  angleAcceleration <- randomValue engine.angleAccelerationBase engine.angleAccelerationSpread
-  size <- randomValue engine.sizeBase engine.sizeSpread
-  opacity <- randomValue engine.opacityBase engine.opacitySpread
-  color <- randomVector engine.colorBase engine.colorSpread
+  --angle <- randomValue engine.angleBase engine.angleSpread
+  --angleVelocity <- randomValue engine.angleVelocityBase engine.angleVelocitySpread
+  --angleAcceleration <- randomValue engine.angleAccelerationBase engine.angleAccelerationSpread
+  --size <- randomValue engine.sizeBase engine.sizeSpread
+  --opacity <- randomValue engine.opacityBase engine.opacitySpread
+  --color <- randomVector engine.colorBase engine.colorSpread
   pure
     { position
     , velocity
     , acceleration
-    , angle
-    , angleVelocity
-    , angleAcceleration
-    , size
-    , color:              hsl color.x color.y color.z
-    , opacity
+    --, angle
+    --, angleVelocity
+    --, angleAcceleration
+    --, size
+    --, color:              hsl color.x color.y color.z
+    --, opacity
     , age:                0.0
     , state:              ParticleInit
     }
@@ -129,3 +128,12 @@ makeParticle engine = do
     randomVector :: Vector -> Vector -> Effect Vector
     randomVector base spread = (\x y z -> base + (spread * ({ x: x - 0.5, y: y - 0.5, z: z - 0.5 }))) <$> random <*> random <*> random
 
+updateParticle :: Number -> Particle -> Particle
+updateParticle dt particle =
+  particle
+    { position = particle.position + ( particle.velocity * { x: dt, y: dt, z: dt } )
+    , velocity = particle.velocity + ( particle.acceleration * { x: dt, y: dt, z: dt } )
+    --, angle = particle.angle + particle.angleVelocity * (Math.pi/180.0) * dt
+    --, angleVelocity = particle.angleVelocity + particle.angleAcceleration * (Math.pi/180.0) * dt
+    , age = particle.age + dt
+    }
