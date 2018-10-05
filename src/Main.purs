@@ -56,7 +56,10 @@ rigging screen engine initialStage =
     updateStage :: Seconds -> Dimensions -> Stage -> Stage
     updateStage sec dimensions stage@{emitter, particles, prevRenderTime} =
       let
-        dt = (\d -> if d > 0.1 then 0.0  else d * 0.5) ((unwrap sec) - (unwrap prevRenderTime))
+        dt = (unwrap sec) - (unwrap prevRenderTime) # \d ->
+          if d > 0.1
+            then 0.0
+            else d * 0.5
       in
         stage
           { dimensions = dimensions
