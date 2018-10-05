@@ -25,8 +25,6 @@ import Three as Three
 import Web.HTML (window) as HTML
 import Web.HTML.Window (innerHeight, innerWidth)
 
-type Delta = Number
-
 type Stage =
   { dimensions :: Dimensions
   , particles :: Array PE.Particle
@@ -63,14 +61,17 @@ rigging screen engine initialStage =
         stage
           { dimensions = dimensions
           , particles = mapWithIndex (\i -> updateParticle i dt emitter) (staggeredStart dt stage)
-          , emitter
-            { age = emitter.age + dt
-            , state = if (emitter.age  + dt) > engine.emitterDeathAge then PE.EmitterDead else emitter.state
-            }
+          , emitter = emitter.age + dt # \age -> emitter
+              { age = age
+              , state =
+                if age > engine.emitterDeathAge
+                  then PE.EmitterDead
+                  else emitter.state
+              }
           , prevRenderTime = sec
           }
 
-    staggeredStart :: Delta -> Stage -> Array PE.Particle
+    staggeredStart :: Number -> Stage -> Array PE.Particle
     staggeredStart dt { emitter, particles } =
       if emitter.age < engine.particleDeathAge
         then
@@ -80,19 +81,20 @@ rigging screen engine initialStage =
           in
             modifyAtIndices (start .. end) (\p ->
                 case p.state of
-                  PE.ParticleInit ->
-                    p { state = PE.ParticleAlive }
-                  _ ->
-                    p
+                  PE.ParticleInit -> p { state = PE.ParticleAlive }
+                  _ -> p
               ) particles
         else
           particles
 
-    updateParticle :: Int -> Delta -> PE.Emitter -> PE.Particle -> PE.Particle
+    updateParticle :: Int -> Number -> PE.Emitter -> PE.Particle -> PE.Particle
     updateParticle i dt emitter particle =
       case particle.state of
         PE.ParticleAlive ->
-          (\p -> if p.age > engine.particleDeathAge then p { state = PE.ParticleDead } else p) $ PE.updateParticle dt particle
+          PE.updateParticle dt particle # \p ->
+            if p.age > engine.particleDeathAge
+              then p { state = PE.ParticleDead }
+              else p
         PE.ParticleDead ->
           case Tuple emitter.state (index initialStage.particles i) of
             Tuple PE.EmitterAlive (Just initialParticle) ->
