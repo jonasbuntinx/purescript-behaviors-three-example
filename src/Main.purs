@@ -28,7 +28,7 @@ import Web.HTML.Window (innerHeight, innerWidth)
 type Stage =
   { dimensions :: Dimensions
   , particles :: Array PE.Particle
-  , geometry :: Three.BufferGeometry
+  , positions :: Three.Float32BufferAttribute
   , emitter :: PE.Emitter
   , prevRenderTime :: Seconds
   }
@@ -39,13 +39,15 @@ staging dimensions scene engine = do
   --
   geometry <- Three.makeBufferGeometry
   particles <- for (0 .. round engine.particleCount) (\_ -> PE.makeParticle engine)
+  positions <- Three.makeFloat32BufferAttribute (concat $ particles <#> (\p -> [ p.position.x, p.position.y, p.position.z])) 3
+  Three.addAttribute "position" positions geometry
   --
   material <- Three.makePointsMaterial { color: toHexString orangered, size: 3 }
   --
   points <- Three.makePoints (unwrap geometry) material
   Three.addChild (unwrap points) (unwrap scene)
   --
-  pure { dimensions: dimensions, particles, geometry, emitter: { age: 0.0, state: PE.EmitterAlive }, prevRenderTime: now }
+  pure { dimensions: dimensions, particles, positions, emitter: { age: 0.0, state: PE.EmitterAlive }, prevRenderTime: now }
 
 rigging :: Screen -> PE.ParticleEngine -> Stage -> Behavior Stage
 rigging screen engine initialStage =
@@ -110,13 +112,13 @@ rigging screen engine initialStage =
           particle
 
 render :: Three.Scene -> Three.Camera -> Three.Renderer -> Stage -> Effect Unit
-render scene camera renderer { dimensions, particles, geometry, emitter } = do
+render scene camera renderer { dimensions, particles, positions, emitter } = do
   Three.setSize dimensions.width dimensions.height renderer
   Three.setAspect (dimensions.width / dimensions.height) camera
   Three.updateProjectionMatrix camera
   --
-  positions <- Three.makeFloat32BufferAttribute (concat $ particles <#> (\p -> [ p.position.x, p.position.y, p.position.z])) 3
-  Three.addAttribute "position" positions geometry
+  Three.setArrayFloat32 (concat $ particles <#> (\p -> [ p.position.x, p.position.y, p.position.z])) positions
+  Three.needsUpdate true positions
   --
   Three.render scene camera renderer
 
