@@ -148,6 +148,16 @@ foreign import makeFloat32BufferAttributeImpl :: forall t. EffectFn2 (Array t) I
 makeFloat32BufferAttribute :: forall t. Array t -> Int -> Effect Float32BufferAttribute
 makeFloat32BufferAttribute = runEffectFn2 makeFloat32BufferAttributeImpl
 
+foreign import setArrayFloat32Impl :: forall t. EffectFn2 (Array t) Float32BufferAttribute Unit
+
+setArrayFloat32 :: forall t. Array t -> Float32BufferAttribute -> Effect Unit
+setArrayFloat32 = runEffectFn2 setArrayFloat32Impl
+
+foreign import needsUpdateImpl :: EffectFn2 Boolean Float32BufferAttribute Unit
+
+needsUpdate :: Boolean-> Float32BufferAttribute -> Effect Unit
+needsUpdate = runEffectFn2 needsUpdateImpl
+
 -- Material
 
 foreign import data Material :: Type

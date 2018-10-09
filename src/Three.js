@@ -49,7 +49,6 @@ exports.makeLineImpl = function (geometry, material) {
   return new THREE.Line(geometry, material);
 };
 
-
 // Object3D > Mesh
 
 exports.makeMeshImpl = function (geometry, material) {
@@ -100,6 +99,16 @@ exports.makeFloat32BufferAttributeImpl = function (array, itemSize) {
   return new THREE.Float32BufferAttribute(array, itemSize).setDynamic(true);
 };
 
+exports.setArrayFloat32Impl = function (array, bufferAttribute) {
+  bufferAttribute.set(new Float32Array(array));
+  return {};
+};
+
+exports.needsUpdateImpl = function (boolean, bufferAttribute) {
+  bufferAttribute.needsUpdate = boolean;
+  return {};
+};
+
 // Material
 
 exports.makeMeshBasicMaterialImpl = function (parameters) {
@@ -118,7 +127,6 @@ exports.makeWebGLRenderer = function () {
 
 exports.setSizeImpl = function (width, height, renderer) {
   renderer.setSize(width, height);
-  document.body.appendChild(renderer.domElement);
   return {};
 };
 
