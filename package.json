@@ -16,14 +16,14 @@
     "test": "$(yarn bin)/pulp test"
   },
   "devDependencies": {
-    "parcel-bundler": "^1.9.4",
+    "parcel-bundler": "^1.10.3",
     "psc-package": "^0.3.2",
-    "pscid": "^2.5.3",
+    "pscid": "^2.6.0",
     "pulp": "^12.3.0",
     "purescript": "^0.12.0",
-    "purescript-psa": "^0.6.0"
+    "purescript-psa": "^0.7.3"
   },
   "dependencies": {
-    "three": "^0.89.0"
+    "three": "^0.97.0"
   }
 }
