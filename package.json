@@ -20,10 +20,10 @@
     "psc-package": "^0.3.2",
     "pscid": "^2.6.0",
     "pulp": "^12.3.0",
-    "purescript": "^0.12.0",
+    "purescript": "^0.12.1",
     "purescript-psa": "^0.7.3"
   },
   "dependencies": {
-    "three": "^0.97.0"
+    "three": "^0.98.0"
   }
 }
