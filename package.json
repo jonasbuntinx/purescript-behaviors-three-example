@@ -10,7 +10,7 @@
     "postinstall": "rm -Rf .psc-package && $(yarn bin)/psc-package install",
     "clean": "rm -Rf .pulp-cache dist output",
     "pscid:build": "$(yarn bin)/pulp build",
-    "build": "yarn bin clean && $(yarn bin)/pulp build && $(yarn bin)/parcel build index.html --experimental-scope-hoisting",
+    "build": "yarn clean && $(yarn bin)/pulp build && $(yarn bin)/parcel build index.html --experimental-scope-hoisting",
     "serve": "$(yarn bin)/pulp --watch build & $(yarn bin)/parcel index.html --open",
     "id": "$(yarn bin)/pscid",
     "test": "$(yarn bin)/pulp test"
